@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.*
 class MealController(private val repoMeal: MealDao) {
 
     @GetMapping("/meal")
-    fun findAll() = repoMeal.findAll()
+    fun findAll(): List<String> = repoMeal.findAll().map { it.name }
 }

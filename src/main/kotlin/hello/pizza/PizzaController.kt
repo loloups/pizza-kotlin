@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController
 class PizzaController(private val repoPizza: PizzaDao) {
 
     @GetMapping("/pizza")
-    fun findAll() = repoPizza.findAll()
+    fun findAll(): List<PizzaDto> = repoPizza.findAll().map { PizzaDto.toDto(it) }
 }
