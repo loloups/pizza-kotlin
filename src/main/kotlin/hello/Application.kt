@@ -28,7 +28,7 @@ class Application {
 
 			val order = Order(5)
 
-			order.pizzas = listOf(savedMeal)
+			order.pizzas = mutableListOf(savedMeal)
 			repoOrder.save(order)
 			// fetch all customers
 			log.info("Customers found with findAll():")

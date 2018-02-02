@@ -10,13 +10,16 @@ import javax.persistence.JoinTable
 import javax.persistence.ManyToMany
 
 @Entity(name = "orders")
-data class Order(
-		val numberTable: Int,
-		@Id @GeneratedValue(strategy = GenerationType.AUTO)
-		val id: Long = -1){
+class Order(nbTable: Int) {
+
+    var numberTable: Int = nbTable
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = -1
+
     @ManyToMany
     @JoinTable(name = "order_pizza", joinColumns = arrayOf(JoinColumn(name ="order_id", referencedColumnName = "id")),
             inverseJoinColumns = arrayOf(JoinColumn(name = "meal_id", referencedColumnName = "id")))
-    lateinit var pizzas: List<Pizza>
+    var pizzas: MutableList<Pizza> = mutableListOf()
+
 
 }

@@ -4,6 +4,7 @@ import hello.meal.MealDao
 import hello.pizza.Pizza
 import hello.pizza.PizzaDao
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @CrossOrigin()
 @RestController
@@ -13,12 +14,13 @@ class OrderController(private val repository: OrderDao, private val repoMeal: Me
     fun findAll(): List<OrderDto> = repository.findAll().map { OrderDto.toDto(it) }
 
     @PostMapping("/order")
-    fun addOrder(@RequestBody pizzas: List<Pizza> ): OrderDto {
-        val pizzaSaved = pizzas.map { pizza ->
-            repoPizza.save(pizza)
+    fun addOrder(@RequestBody order: OrderCreation): OrderDto {
+        val pizzaSaved: List<Optional<Pizza>> = order.pizzas.map { pizzaId ->
+            repoPizza.findById(pizzaId)
         }
-        val orderToCreate = Order(1)
-        orderToCreate.pizzas = pizzaSaved
+
+        val orderToCreate = Order(order.nbTable)
+        pizzaSaved.forEach { pizza -> pizza.ifPresent { p -> orderToCreate.pizzas.add(p) } }
         return OrderDto.toDto(repository.save(orderToCreate))
     }
 }
